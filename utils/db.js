@@ -1,5 +1,5 @@
 import { app } from './firebaseConfig'
-import { arrayUnion, collection, doc, getDoc, getDocs, getFirestore, query, setDoc, updateDoc, where } from '@firebase/firestore'
+import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, getFirestore, query, setDoc, updateDoc, where } from '@firebase/firestore'
 
 const db = getFirestore(app)
 
@@ -86,12 +86,62 @@ export async function getTutoriasDisponibles ({ uid }) {
 }
 
 /**
+ * @param {Object} user
+ * @param {string} user.uid
+ */
+export async function getTutoriasParaDar ({ uid }) {
+  const snapshot = await getDoc(doc(db, 'users', uid))
+  if (snapshot.exists()) {
+    const { semestre, carrera } = snapshot.data()
+    console.log(semestre, carrera)
+    const materias = await getDocs(query(
+      collection(db, 'materias'),
+      where('semestre', '<', semestre),
+      where('carreras', 'array-contains', carrera)
+    ))
+    return materias.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+  }
+  return []
+}
+
+/**
+ * @param {Object} tutoria
+ * @param {string} tutoria.materia
+ * @param {string} tutoria.dia
+ * @param {string} tutoria.hora
+ * @param {string} tutoria.tutor
+ */
+export async function aspirarATutoria ({ materia, dia, hora, tutor }) {
+  await addDoc(collection(db, 'tutorias'), {
+    materia,
+    dia,
+    hora,
+    tutor,
+    estado: 'pendiente'
+  })
+}
+
+/**
  * @param {Object} obj
  * @param {string} obj.userId
  * @param {Object} obj.tutoria
  */
 export async function inscribirEnTutoria ({ userId, tutoria }) {
-  console.log(userId, tutoria)
   const tutoriaRef = doc(db, 'tutorias', tutoria.id)
   await updateDoc(doc(db, 'users', userId), { tutorias: arrayUnion(tutoriaRef) })
+}
+
+/**
+ * @param {Object} user
+ * @param {string} user.nombre
+ */
+export async function getTutoriasDadas ({ nombre }) {
+  const tutoriasSnapshot = await getDocs(query(
+    collection(db, 'tutorias'),
+    where('tutor', '==', nombre)
+  ))
+  const tutorias = tutoriasSnapshot.docs
+    .filter(doc => doc.data().estado === 'activa')
+    .map(doc => ({ id: doc.id, ...doc.data() }))
+  return tutorias
 }

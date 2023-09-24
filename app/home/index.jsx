@@ -17,6 +17,14 @@ export default function Home () {
       >
         <Text className='text-center text-md font-semibold'>Inscribirse en otra tutoria</Text>
       </TouchableHighlight>
+      <TouchableHighlight
+        className='rounded-md p-4 bg-purple-400 w-2/3'
+        activeOpacity={0.7}
+        underlayColor='#EEEEEE'
+        onPress={() => router.replace('/home/tutor')}
+      >
+        <Text className='text-center text-md font-semibold'>Ver tus tutorias</Text>
+      </TouchableHighlight>
     </View>
   )
 }
