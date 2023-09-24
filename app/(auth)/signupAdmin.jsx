@@ -26,7 +26,7 @@ export default function SignUpAdmin () {
     try {
       usuario = await esquemaAuth.validate(usuario)
       if (!usuario.email.endsWith('@ucab.edu.ve')) {
-        throw new Error('El correo no pertenece a la institución')
+        throw new Error('Correo invalido para docentes')
       }
       const resUser = await appSignUp(usuario)
       if (resUser.user) {
