@@ -39,11 +39,11 @@ export default function AdministrarAspirantes () {
   }
 
   return (
-    <View className='flex flex-col gap-2'>
+    <ScrollView className='flex-1 flex-col gap-2'>
       <Text className='text-xl'>Aprobar o rechazar solicitudes</Text>
       {aspirantes.length === 0
         ? <Text>No hay solicitudes</Text>
-        : <ScrollView className='flex'>
+        : <View>
           {aspirantes.map(aspirante => (
             <View key={aspirante.id} className='bg-gray-400 flex flex-col gap-2 p-4 rounded-lg'>
               <Text>Nombre: {aspirante.tutor}</Text>
@@ -65,7 +65,7 @@ export default function AdministrarAspirantes () {
                 />
               </View>
             </View>))}
-        </ScrollView>}
-    </View>
+          </View>}
+    </ScrollView>
   )
 }
