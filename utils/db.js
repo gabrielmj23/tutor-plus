@@ -81,8 +81,11 @@ export async function getTutoriasDisponibles ({ uid }) {
   const snapshot = await getDoc(doc(db, 'users', uid))
   if (snapshot.exists()) {
     // Obtener tutorias ya registradas por el usuario
-    const { tutorias } = snapshot.data()
-    const idTutorias = tutorias.map(tutoria => tutoria.id)
+    const tutorias = snapshot.data().tutorias ?? null
+    let idTutorias = []
+    if (tutorias) {
+      idTutorias = tutorias.map(tutoria => tutoria.id)
+    }
     // Obtener todas las tutorias disponibles
     const snapTutorias = await getDocs(query(
       collection(db, 'tutorias'),
@@ -206,4 +209,32 @@ export async function aprobarSolicitud ({ uid }) {
 export async function rechazarSolicitud ({ uid }) {
   const tutoriaRef = doc(db, 'tutorias', uid)
   await deleteDoc(tutoriaRef)
+}
+
+/**
+ * @param {Object} obj
+ * @param {string} obj.uid
+ */
+export async function getEstudiantesDeTutoria ({ uid }) {
+  const tutoriaRef = doc(db, 'tutorias', uid)
+  const estudiantesSnapshot = await getDocs(query(
+    collection(db, 'users'),
+    where('tutorias', 'array-contains', tutoriaRef)
+  ))
+  return estudiantesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+}
+
+/**
+ * @param {Object} obj
+ * @param {Object} obj.asistencia
+ * @param {Date} obj.fecha
+ * @param {string} obj.tutoriaId
+ */
+export async function guardarAsistencia ({ asistencia, fecha, tutoriaId }) {
+  const tutoriaRef = doc(db, 'tutorias', tutoriaId)
+  await addDoc(collection(db, 'asistencias'), {
+    asistencia,
+    fecha,
+    tutoria: tutoriaRef
+  })
 }

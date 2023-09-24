@@ -51,7 +51,7 @@ export default function TutoriasDisponibles () {
   }
 
   return (
-    <View className='h-1/3 w-full items-center gap-3 px-4'>
+    <View className='h-2/3 w-full items-center gap-3 px-4'>
       <Picker
         selectedValue={selectedSemestre}
         onValueChange={setSelectedSemestre}
