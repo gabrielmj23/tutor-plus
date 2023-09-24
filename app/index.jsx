@@ -10,8 +10,11 @@ export default function Index () {
         <Link className='text-lg text-center bg-cyan-500 p-2 rounded-lg' href='/(auth)/login'>
           Iniciar sesion
         </Link>
-        <Link className='text-lg text-center bg-cyan-500 p-2 rounded-lg' href='/(auth)/signup'>
-          Registrarse
+        <Link className='text-lg text-center bg-cyan-500 p-2 rounded-lg' href='/(auth)/signupEstudiantes'>
+          Registrarse (Estudiantes)
+        </Link>
+        <Link className='text-lg text-center bg-cyan-500 p-2 rounded-lg' href='/(auth)/signupAdmin'>
+          Registrarse (Profesores)
         </Link>
       </View>
     </View>
