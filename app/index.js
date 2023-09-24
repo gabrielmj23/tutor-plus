@@ -1,6 +1,6 @@
 import React from 'react'
-import { Text } from 'react-native'
+import AdministrarTutoriaIndex from './administrar-tutoria/index.js'
 
 export default function Index () {
-  return <Text className='bg-slate-500'>Hola mundo</Text>
+  return <AdministrarTutoriaIndex />
 }
