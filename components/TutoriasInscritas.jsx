@@ -19,7 +19,7 @@ export default function TutoriasInscritas () {
   }, [])
 
   return (
-    <View className='flex flex-col h-1/5 p-4'>
+    <View className='flex flex-col h-1/2 p-4'>
       <Text className='text-xl'>Tus tutorias inscritas</Text>
       {!cargando && inscritas.length === 0
         ? <Text className='text-md'>Parece que no has inscrito alguna tutoria</Text>

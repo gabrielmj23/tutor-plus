@@ -1,5 +1,5 @@
 import { app } from './firebaseConfig'
-import { collection, doc, getDoc, getDocs, getFirestore, setDoc } from '@firebase/firestore'
+import { arrayUnion, collection, doc, getDoc, getDocs, getFirestore, query, setDoc, updateDoc, where } from '@firebase/firestore'
 
 const db = getFirestore(app)
 
@@ -51,10 +51,47 @@ export async function getTutoriasInscritas ({ uid }) {
     const tutoriasInscritas = []
     for (const tutoria of tutorias) {
       const snapshotTutoria = await getDoc(doc(db, 'tutorias', tutoria.id))
-      tutoriasInscritas.push({ id: tutoria.id, ...snapshotTutoria.data() })
+      if (snapshotTutoria.data().estado === 'activa') {
+        tutoriasInscritas.push({ id: tutoria.id, ...snapshotTutoria.data() })
+      }
     }
-    console.log(tutoriasInscritas)
     return tutoriasInscritas
   }
   return []
+}
+
+/**
+ * @param {Object} user
+ * @param {string} user.uid
+ */
+export async function getTutoriasDisponibles ({ uid }) {
+  const snapshot = await getDoc(doc(db, 'users', uid))
+  if (snapshot.exists()) {
+    // Obtener tutorias ya registradas por el usuario
+    const { tutorias } = snapshot.data()
+    const idTutorias = tutorias.map(tutoria => tutoria.id)
+    // Obtener todas las tutorias disponibles
+    const snapTutorias = await getDocs(query(
+      collection(db, 'tutorias'),
+      where('estado', '==', 'activa')
+    ))
+    // Extraer informacion
+    const tutoriasDisponibles = snapTutorias
+      .docs
+      .filter(doc => idTutorias.indexOf(doc.id) === -1)
+      .map(doc => ({ id: doc.id, ...doc.data() }))
+    return tutoriasDisponibles
+  }
+  return []
+}
+
+/**
+ * @param {Object} obj
+ * @param {string} obj.userId
+ * @param {Object} obj.tutoria
+ */
+export async function inscribirEnTutoria ({ userId, tutoria }) {
+  console.log(userId, tutoria)
+  const tutoriaRef = doc(db, 'tutorias', tutoria.id)
+  await updateDoc(doc(db, 'users', userId), { tutorias: arrayUnion(tutoriaRef) })
 }
