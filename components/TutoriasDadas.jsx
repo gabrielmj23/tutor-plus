@@ -35,7 +35,7 @@ export default function TutoriasDadas () {
                     router.replace(`/tutorias/${tutoria.id}`)
                   }}
                 >
-                  <Text className='font-semibold text-center'>Inscribirse</Text>
+                  <Text className='font-semibold text-center'>Asistencia</Text>
                 </TouchableHighlight>
               </TutoriaItem>
             )}
