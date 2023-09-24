@@ -96,7 +96,7 @@ export default function SignUpEstudiantes () {
         />
         <Picker
           style={{ width: '100%' }}
-          value={datos.carrera}
+          selectedValue={datos.carrera}
           mode='dropdown'
           onValueChange={(value) => setDatos({ ...datos, carrera: value })}
         >

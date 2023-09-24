@@ -47,7 +47,7 @@ export default function Aspirar () {
       <View className='flex flex-col flex-none items-center justify-center w-3/5 gap-4'>
         <Picker
           style={{ width: '100%' }}
-          value={datos.materia}
+          selectedValue={datos.materia}
           mode='dropdown'
           onValueChange={(value) => setDatos({ ...datos, materia: value })}
         >

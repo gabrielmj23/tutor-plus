@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { ScrollView, View, Text, Button, Alert } from 'react-native'
+import { ScrollView, View, Text, Button, Alert, TouchableHighlight } from 'react-native'
 import StudentList from '../../components/StudentList.jsx'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { getEstudiantesDeTutoria, guardarAsistencia } from '../../utils/db.js'
 import { router, useLocalSearchParams } from 'expo-router'
+import { AuthStore } from '../../utils/store.js'
 
 export default function VerTutoria () {
   const [showStudents, setShowStudents] = useState(false)
@@ -136,6 +137,20 @@ export default function VerTutoria () {
           </View>
         </View>
       )}
+      <TouchableHighlight
+        className='rounded-md p-4 bg-lime-500 w-2/3'
+        activeOpacity={0.7}
+        underlayColor='#EEEEEE'
+        onPress={() => {
+          if (AuthStore.getRawState().roles.admin) {
+            router.replace('/admin')
+          } else {
+            router.replace('/home')
+          }
+        }}
+      >
+        <Text className='text-center text-md font-semibold'>Salir</Text>
+      </TouchableHighlight>
     </ScrollView>
   )
 }
