@@ -7,7 +7,7 @@ const StudentList = () => {
         <FlatList 
             data = {students}
             ItemSeparatorComponent={() => <Text> </Text>}
-            renderItem={({item: student}) => <StudentItem student={student} />
+            renderItem={({item: student}) => <StudentItem  student={student} />
             }
         />
     )
