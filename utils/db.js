@@ -109,12 +109,16 @@ export async function getTutoriasParaDar ({ uid }) {
   const snapshot = await getDoc(doc(db, 'users', uid))
   if (snapshot.exists()) {
     const { semestre, carrera } = snapshot.data()
-    console.log(semestre, carrera)
-    const materias = await getDocs(query(
-      collection(db, 'materias'),
-      where('semestre', '<', semestre),
-      where('carreras', 'array-contains', carrera)
-    ))
+    let materias
+    if (semestre && carrera) {
+      materias = await getDocs(query(
+        collection(db, 'materias'),
+        where('semestre', '<', semestre),
+        where('carreras', 'array-contains', carrera)
+      ))
+    } else {
+      materias = await getDocs(collection(db, 'materias'))
+    }
     return materias.docs.map(doc => ({ id: doc.id, ...doc.data() }))
   }
   return []
