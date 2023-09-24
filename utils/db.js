@@ -1,5 +1,18 @@
 import { app } from './firebaseConfig'
-import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, getFirestore, query, setDoc, updateDoc, where } from '@firebase/firestore'
+import {
+  addDoc,
+  arrayUnion,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  getFirestore,
+  query,
+  setDoc,
+  updateDoc,
+  where
+} from '@firebase/firestore'
 
 const db = getFirestore(app)
 
@@ -144,4 +157,53 @@ export async function getTutoriasDadas ({ nombre }) {
     .filter(doc => doc.data().estado === 'activa')
     .map(doc => ({ id: doc.id, ...doc.data() }))
   return tutorias
+}
+
+export async function getAspirantes () {
+  const tutoriasSnapshot = await getDocs(query(
+    collection(db, 'tutorias'),
+    where('estado', '==', 'pendiente')
+  ))
+  const aspirantes = []
+  for (const tutoria of tutoriasSnapshot.docs) {
+    const { materia, dia, hora, tutor } = tutoria.data()
+    const tutorSnapshot = await getDocs(query(
+      collection(db, 'users'),
+      where('nombre', '==', tutor)
+    ))
+    const { cedula, email, nombre, telefono } = tutorSnapshot.docs[0].data()
+    aspirantes.push({
+      id: tutoria.id,
+      materia,
+      dia,
+      hora,
+      tutor: nombre,
+      cedula,
+      email,
+      telefono
+    })
+  }
+  return aspirantes
+}
+
+/**
+ * @param {Object} obj
+ * @param {string} obj.uid
+ */
+export async function aprobarSolicitud ({ uid }) {
+  const tutoriaRef = doc(db, 'tutorias', uid)
+  const modulos = ['1', '2', 'R', '4']
+  const pisos = ['1', '2']
+  const aulas = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+  const salon = 'A' + modulos[Math.floor(Math.random() * modulos.length)] + '-' + pisos[Math.floor(Math.random() * pisos.length)] + aulas[Math.floor(Math.random() * aulas.length)]
+  await updateDoc(tutoriaRef, { estado: 'activa', salon })
+}
+
+/**
+ * @param {Object} obj
+ * @param {string} obj.uid
+ */
+export async function rechazarSolicitud ({ uid }) {
+  const tutoriaRef = doc(db, 'tutorias', uid)
+  await deleteDoc(tutoriaRef)
 }

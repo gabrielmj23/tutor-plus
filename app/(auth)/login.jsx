@@ -2,7 +2,7 @@ import React from 'react'
 import * as yup from 'yup'
 import { TouchableHighlight, Text, TextInput, View, Alert } from 'react-native'
 import { router } from 'expo-router'
-import { appSignIn } from '../../utils/store'
+import { AuthStore, appSignIn } from '../../utils/store'
 
 const esquemaAuth = yup.object().shape({
   email: yup.string().trim().email('Email invalido').required('Email requerido'),
@@ -13,12 +13,16 @@ export default function LogIn () {
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
 
-  async function manejarLogInEstudiante () {
+  async function manejarLogin () {
     try {
       const usuario = await esquemaAuth.validate({ email, password })
       const resUser = await appSignIn(usuario.email, usuario.password)
       if (resUser.user) {
-        router.replace('/home')
+        if (AuthStore.getRawState().roles.admin) {
+          router.replace('/admin')
+        } else {
+          router.replace('/home')
+        }
       } else {
         Alert.alert('Error', resUser.error.message)
       }
@@ -49,12 +53,9 @@ export default function LogIn () {
           className='rounded-md p-4 bg-cyan-500 w-full'
           activeOpacity={0.7}
           underlayColor='#EEEEEE'
-          onPress={() => manejarLogInEstudiante()}
+          onPress={() => manejarLogin()}
         >
-          <Text className='text-center text-md font-semibold'>Entrar como estudiante</Text>
-        </TouchableHighlight>
-        <TouchableHighlight className='rounded-md bg-cyan-500 p-4 w-full'>
-          <Text className='text-center text-md font-semibold'>Entrar como administrador</Text>
+          <Text className='text-center text-md font-semibold'>Entrar</Text>
         </TouchableHighlight>
       </View>
     </View>

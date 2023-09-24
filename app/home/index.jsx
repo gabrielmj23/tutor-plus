@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text, TouchableHighlight, View } from 'react-native'
-import { AuthStore } from '../../utils/store'
+import { AuthStore, appSignOut } from '../../utils/store'
 import TutoriasInscritas from '../../components/TutoriasInscritas'
 import { router } from 'expo-router'
 
@@ -24,6 +24,17 @@ export default function Home () {
         onPress={() => router.replace('/home/tutor')}
       >
         <Text className='text-center text-md font-semibold'>Ver tus tutorias</Text>
+      </TouchableHighlight>
+      <TouchableHighlight
+        className='rounded-md p-4 bg-red-400 w-2/3'
+        activeOpacity={0.7}
+        underlayColor='#EEEEEE'
+        onPress={() => {
+          appSignOut()
+          router.replace('/')
+        }}
+      >
+        <Text className='text-center text-md font-semibold'>Salir</Text>
       </TouchableHighlight>
     </View>
   )
