@@ -30,7 +30,7 @@ export default function SignUpAdmin () {
       }
       const resUser = await appSignUp(usuario)
       if (resUser.user) {
-        router.replace('/home')
+        router.replace('/admin')
       } else {
         Alert.alert('Error', resUser.error.message)
       }

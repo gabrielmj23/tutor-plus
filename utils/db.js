@@ -1,5 +1,5 @@
 import { app } from './firebaseConfig'
-import { collection, doc, getDocs, getFirestore, setDoc } from '@firebase/firestore'
+import { collection, doc, getDoc, getDocs, getFirestore, setDoc } from '@firebase/firestore'
 
 const db = getFirestore(app)
 
@@ -38,4 +38,23 @@ export async function guardarDatosDeUsuario ({ uid, email, nombre, cedula, telef
       admin: !semestre
     }
   })
+}
+
+/**
+ * @param {Object} user
+ * @param {string} user.uid
+ */
+export async function getTutoriasInscritas ({ uid }) {
+  const snapshot = await getDoc(doc(db, 'users', uid))
+  if (snapshot.exists()) {
+    const { tutorias } = snapshot.data()
+    const tutoriasInscritas = []
+    for (const tutoria of tutorias) {
+      const snapshotTutoria = await getDoc(doc(db, 'tutorias', tutoria.id))
+      tutoriasInscritas.push({ id: tutoria.id, ...snapshotTutoria.data() })
+    }
+    console.log(tutoriasInscritas)
+    return tutoriasInscritas
+  }
+  return []
 }
