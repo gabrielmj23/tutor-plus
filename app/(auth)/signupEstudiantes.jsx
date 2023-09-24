@@ -3,8 +3,8 @@ import * as yup from 'yup'
 import { TouchableHighlight, Text, TextInput, View, Alert } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
 import { router } from 'expo-router'
-import { appSignUp } from '../../store'
-import { getCarreras } from '../../db'
+import { appSignUp } from '../../utils/store'
+import { getCarreras } from '../../utils/db'
 
 const esquemaAuth = yup.object().shape({
   email: yup.string().trim().email('Email invalido').required('Email requerido'),
