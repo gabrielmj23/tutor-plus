@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-closing-tag-location */
 import React, { useState } from 'react'
-import { View, Text, Button, Alert, ScrollView,FlatList } from 'react-native'
+import { View, Text, Button, Alert, ScrollView, FlatList } from 'react-native'
 import { aprobarSolicitud, getAspirantes, rechazarSolicitud } from '../utils/db.js'
 import { router } from 'expo-router'
 
@@ -39,7 +39,7 @@ export default function AdministrarAspirantes () {
   }
 
   return (
-     <ScrollView className='flex-1 flex-col gap-2'>
+    <ScrollView className='flex-1 flex-col gap-2'>
       <Text className='text-xl'>Aprobar o rechazar solicitudes</Text>
       {aspirantes.length === 0
         ? <Text>No hay solicitudes</Text>
@@ -69,12 +69,9 @@ export default function AdministrarAspirantes () {
                 </View>
               </View>
             )}
-            ItemSeparatorComponent={() => <View style={{ height: 20}} />}
+            ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
           />
-          </View>}
+        </View>}
     </ScrollView>
-    )
-        }
-   
-  
-
+  )
+}
