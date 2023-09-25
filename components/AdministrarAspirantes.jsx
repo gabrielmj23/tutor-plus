@@ -30,7 +30,7 @@ export default function AdministrarAspirantes () {
   async function handleRechazar (aspirante) {
     try {
       await rechazarSolicitud({ uid: aspirante.id })
-      Alert.alert('Exito', 'Solicitud aprobada')
+      Alert.alert('Exito', 'Solicitud rechazada')
       router.replace('/admin')
     } catch (error) {
       Alert.alert('Error', error.message)
