@@ -92,10 +92,16 @@ export async function getTutoriasDisponibles ({ uid }) {
       where('estado', '==', 'activa')
     ))
     // Extraer informacion
-    const tutoriasDisponibles = snapTutorias
-      .docs
-      .filter(doc => idTutorias.indexOf(doc.id) === -1)
-      .map(doc => ({ id: doc.id, ...doc.data() }))
+    const tutoriasDisponibles = []
+    for (const tutoria of snapTutorias.docs) {
+      if (idTutorias.length > 0 && idTutorias.includes(tutoria.id)) continue
+      const materiaSnapshot = await getDocs(query(
+        collection(db, 'materias'),
+        where('nombre', '==', tutoria.data().materia)
+      ))
+      const { semestre, carreras } = materiaSnapshot.docs[0].data()
+      tutoriasDisponibles.push({ id: tutoria.id, ...tutoria.data(), semestre, carreras })
+    }
     return tutoriasDisponibles
   }
   return []

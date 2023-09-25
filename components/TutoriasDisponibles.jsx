@@ -46,7 +46,7 @@ export default function TutoriasDisponibles () {
 
   if (selectedCarrera) {
     filteredTutorias = filteredTutorias.filter(
-      (tutoria) => tutoria.carrera === selectedCarrera
+      (tutoria) => tutoria.carreras.indexOf(selectedCarrera) !== -1
     )
   }
 
