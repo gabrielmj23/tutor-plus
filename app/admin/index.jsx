@@ -7,7 +7,7 @@ import { router } from 'expo-router'
 export default function Admin () {
   return (
     <View className='flex-1 items-center justify-center gap-3'>
-      <Text className='text-2xl p-4'>Bienvenido/a, {AuthStore.getRawState().user?.displayName}</Text>
+      <Text style= {{paddingTop: 50}} className='text-2xl p-4'>Bienvenido/a, {AuthStore.getRawState().user?.displayName}</Text>
       <AdministrarAspirantes />
       <TouchableHighlight
         className='rounded-md p-4 bg-purple-400 w-2/3'
